@@ -3,11 +3,9 @@ from typing import Any, Dict, Optional, Tuple
 import torch
 from pytorch_lightning import LightningDataModule
 from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
-from torchvision.datasets import MNIST
-from torchvision.transforms import transforms
 
 
-class MNISTDataModule(LightningDataModule):
+class HEALTHDataModule(LightningDataModule):
     """Example of LightningDataModule for MNIST dataset.
 
     A DataModule implements 5 key methods:
@@ -51,12 +49,11 @@ class MNISTDataModule(LightningDataModule):
 
         # data transformations
         self.transforms = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+            [transforms.ToTensor()]
         )
 
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
-        self.data_test: Optional[Dataset] = None
 
     @property
     def num_classes(self):
