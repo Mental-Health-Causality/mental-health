@@ -3,8 +3,55 @@ from typing import Any, Dict, Optional, Tuple
 import torch
 from pytorch_lightning import LightningDataModule
 from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
 
+class MyDataset(Dataset):
 
+    def __init__(self, input_dataframe, split="train", target="Suicidio", ignore_columns=[], train_ratio=0.8):
+
+        self.split = split
+        self.target = target
+        self.ignore_columns = ignore_columns
+
+        for coll in self.ignore_columns:
+            if coll in input_dataframe.columns:
+                input_dataframe = input_dataframe.drop(coll, axis=1)
+
+        self.classification_dim = len(input_dataframe[self.target].unique())
+        self.data_dim = len(input_dataframe.columns) - 1
+        self.embbeding_dim = input_dataframe.max().max() + 1
+
+        y = input_dataframe[target].values
+        x = input_dataframe.drop(target, axis = 1).values
+
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(x, y, test_size=1-train_ratio, random_state=42)
+
+    def __len__(self):
+        if self.split == "train":
+            return len(self.x_train)
+        elif self.split == "test":
+            return len(self.x_test)
+        else:
+            raise ValueError("Split must be train or test")
+
+    def __getitem__(self,idx):
+        # target = torch.zeros(self.classification_dim)
+
+        if self.split == "train":
+            features = torch.tensor(self.x_train[idx])
+            target = torch.tensor(self.y_train[idx])
+
+        elif self.split == "test":
+            features = torch.tensor(self.x_test[idx])
+            target = torch.tensor(self.y_test[idx])
+
+        else:
+            raise ValueError("Split must be train or test")
+
+        return features, target
+        
 class HEALTHDataModule(LightningDataModule):
     """Example of LightningDataModule for MNIST dataset.
 
@@ -36,7 +83,7 @@ class HEALTHDataModule(LightningDataModule):
     def __init__(
         self,
         data_dir: str = "data/",
-        train_val_test_split: Tuple[int, int, int] = (55_000, 5_000, 10_000),
+        target: str = "Suicidio",
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
@@ -47,25 +94,15 @@ class HEALTHDataModule(LightningDataModule):
         # also ensures init params will be stored in ckpt
         self.save_hyperparameters(logger=False)
 
-        # data transformations
-        self.transforms = transforms.Compose(
-            [transforms.ToTensor()]
-        )
-
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
-
-    @property
-    def num_classes(self):
-        return 10
 
     def prepare_data(self):
         """Download data if needed.
 
         Do not use it to assign state (self.x = y).
         """
-        MNIST(self.hparams.data_dir, train=True, download=True)
-        MNIST(self.hparams.data_dir, train=False, download=True)
+        pass
 
     def setup(self, stage: Optional[str] = None):
         """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
@@ -73,16 +110,23 @@ class HEALTHDataModule(LightningDataModule):
         This method is called by lightning with both `trainer.fit()` and `trainer.test()`, so be
         careful not to execute things like random split twice!
         """
-        # load and split datasets only if not loaded already
-        if not self.data_train and not self.data_val and not self.data_test:
-            trainset = MNIST(self.hparams.data_dir, train=True, transform=self.transforms)
-            testset = MNIST(self.hparams.data_dir, train=False, transform=self.transforms)
-            dataset = ConcatDataset(datasets=[trainset, testset])
-            self.data_train, self.data_val, self.data_test = random_split(
-                dataset=dataset,
-                lengths=self.hparams.train_val_test_split,
-                generator=torch.Generator().manual_seed(42),
-            )
+
+        dataframe = pd.read_csv('../data/final.csv', sep=';')
+        selected = ['Suicidio', 'Trabalho e interesses', 'Apetite', 'Sentimentos_culpa', 'Perda de insights',
+                    'Ansiedade somática', 'Ansiedade', 'Perda de peso', 'Lentidao pensamento e fala',
+                    'Hipocondriase', 'Energia', 'Libido',  'sexo','Pontuação total', 'Deprimido']
+
+        df_suic = dataframe[selected]
+
+        df_suic['sexo'].replace({'M': 0, 'F': 1}, inplace=True)
+        df_suic['sexo'].fillna(0, inplace=True)
+
+        df_suic.dropna(inplace=True)
+        df_suic = df_suic.astype(int)
+
+        self.data_train = MyDataset(df_suic, split="train", target="Suicidio", ignore_columns=[], train_ratio=0.8)
+        self.data_val = MyDataset(df_suic, split="test", target="Suicidio", ignore_columns=[], train_ratio=0.8)
+        self.data_test = MyDataset(df_suic, split="test", target="Suicidio", ignore_columns=[], train_ratio=0.8)
 
     def train_dataloader(self):
         return DataLoader(
@@ -130,6 +174,6 @@ if __name__ == "__main__":
     import pyrootutils
 
     root = pyrootutils.setup_root(__file__, pythonpath=True)
-    cfg = omegaconf.OmegaConf.load(root / "configs" / "datamodule" / "mnist.yaml")
+    cfg = omegaconf.OmegaConf.load(root / "configs" / "datamodule" / "health_data.yaml")
     cfg.data_dir = str(root / "data")
     _ = hydra.utils.instantiate(cfg)
