@@ -5,7 +5,7 @@ ENV_NAME=causal
 
 echo "Creating conda env named matcher..."
 conda env remove -n $ENV_NAME
-conda create -n $ENV_NAME python=3.9 pip -y -q
+conda create -n $ENV_NAME python=3.8 pip -y -q
 
 eval "$(conda shell.bash hook)"
 conda activate $ENV_NAME
@@ -13,9 +13,9 @@ conda activate $ENV_NAME
 # Confirm that we are in the right environment
 
 # Assert python version
-echo "Python version should be 3.9"
+echo "Python version should be 3.8"
 python --version
-python -c "import sys; assert sys.version_info >= (3, 9)"
+python -c "import sys; assert sys.version_info >= (3, 8)"
 
 
 # echo "Installing dependencies..."
