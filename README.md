@@ -11,13 +11,30 @@
 
 </div>
 
+#TODOS
+
+- [ ] Add description of the project
+- [ ] Add Notebook descriptions
+- [ ] Add final article
+- [ ] 
+
 ## Description
 
 Everything is in the [notebooks](notebooks) folder.
 
-## Paper Presentation
+Each notebook is a separate experiment. The tldr of  each notebobook is:
 
-[![Paper Presentation](https://img.youtube.com/vi/1Z1Z1Z1Z1Z1/0.jpg)](https://youtu.be/tt1ReJAr6tM)
+- [notebooks/XXXXXXXX.ipynb](notebooks/XXXXXXXX.ipynb) - Add Description Here
+
+## Final Article
+
+- Add PDF here! 
+
+
+## Related Papers Presentation
+
+[![Paper Presentation](https://img.youtube.com/vi/tt1ReJAr6tM/0.jpg)](https://youtu.be/tt1ReJAr6tM)
+
 
 <!-- ## How to run
 
