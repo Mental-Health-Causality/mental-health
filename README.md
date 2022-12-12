@@ -16,7 +16,6 @@
 - [ ] Add description of the project
 - [ ] Add Notebook descriptions
 - [ ] Add final article
-- [ ] 
 
 ## Description
 
