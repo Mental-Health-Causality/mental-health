@@ -36,7 +36,7 @@ selected = ['Suicidio', 'Drog_familia', 'Suic_familia',
 
 
 dataframe['sexo'].replace({'M': 0, 'F': 1}, inplace=True)
-dataframe['sexo'].fillna(0, inplace=True) # Talvez jogar fora
+dataframe['sexo'].fillna(0, inplace=True) 
 
 df_suic = dataframe[selected]
 
