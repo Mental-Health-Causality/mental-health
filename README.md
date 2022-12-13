@@ -24,7 +24,7 @@ Everything is in the [notebooks](notebooks) folder.
 Each notebook is a separate experiment. The tldr of  each notebobook is:
 
 - [notebooks/XXXXXXXX.ipynb](notebooks/XXXXXXXX.ipynb) - Add Description Here
-- [notebooks/baseline3.py](notebooks/baseline3.py) - classification model which uses the causal features and all features
+- [notebooks/baseline.py](notebooks/baseline.py) - classification model which uses the causal features and all features
 - [notebooks/data_transformation_IRT.ipynb](notebooks/data_transformation_IRT.ipynb) - Apply IRT to transform categorical features `suicide` and `anxiety` to continuos
 - [notebooks/interpretability/shap_sample_captum_markov_blanket_features.ipynb](notebooks/interpretability/shap_sample_captum_markov_blanket_features.ipynb) - Load the classification model which uses the causal fetures and then apply SHAP using _Captum_ lib
 - [notebooks/interpretability/shap_sample_captum_all_features.ipynb](notebooks/interpretability/shap_sample_captum_all_features.ipynb) - Load the classification model which uses all features and then apply SHAP using _Captum_ lib
