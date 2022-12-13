@@ -29,9 +29,13 @@ Each notebook is a separate experiment. The tldr of  each notebobook is:
 - [notebooks/interpretability/shap_sample_captum_all_features.ipynb](notebooks/interpretability/shap_sample_captum_all_features.ipynb) - Load the classification model which uses all features and then apply SHAP using _Captum_ lib
 
 
-## Final Article
+## Final Report
 
-- Add PDF here! 
+- [Final Report (PDF)](final_report.pdf)
+
+## Final Presentation
+
+- [Final Presentation (PDF)](final_report_presentation.pdf)
 
 
 ## Related Papers Presentation
