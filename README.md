@@ -24,6 +24,9 @@ Everything is in the [notebooks](notebooks) folder.
 Each notebook is a separate experiment. The tldr of  each notebobook is:
 
 - [notebooks/XXXXXXXX.ipynb](notebooks/XXXXXXXX.ipynb) - Add Description Here
+- [notebooks/interpretability/shap_sample_captum_markov_blanket_features.ipynb](notebooks/interpretability/shap_sample_captum_markov_blanket_features.ipynb) - Load the classification model which uses the causal fetures and then apply SHAP using _Captum_ lib
+- [notebooks/interpretability/shap_sample_captum_all_features.ipynb](notebooks/interpretability/shap_sample_captum_all_features.ipynb) - Load the classification model which uses all features and then apply SHAP using _Captum_ lib
+
 
 ## Final Article
 
